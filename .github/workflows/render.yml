@@ -5,12 +5,16 @@ on:
   workflow_dispatch:
 permissions:
   contents: write
+  pages: write
+  id-token: write
 concurrency:
   group: render
   cancel-in-progress: false
 jobs:
   render:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
     timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
@@ -76,3 +80,12 @@ jobs:
           git add -A
           git commit -qm "videos $(date -u +%F_%H%M)"
           git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" gh-pages
+      # v182：用 GitHub Actions 直接發布 Pages（不再靠 gh-pages 分支自動建置，比較不會卡住）
+      - name: 打包網頁
+        if: steps.check.outputs.n != '0' || steps.collage.outputs.n != '0' || github.event_name == 'workflow_dispatch'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - name: 發布到 GitHub Pages
+        if: steps.check.outputs.n != '0' || steps.collage.outputs.n != '0' || github.event_name == 'workflow_dispatch'
+        uses: actions/deploy-pages@v4
