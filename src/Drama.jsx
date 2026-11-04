@@ -57,6 +57,7 @@ const ClipVideo = ({ c, len }) => {
     <AbsoluteFill style={{ overflow: 'hidden' }}>
       <OffthreadVideo src={src(c.src)} startFrom={Math.round((c.from || 0) * FPS)} volume={vol}
         style={{ width: '100%', height: '100%', objectFit: 'cover', transform: `scale(${z})`, transformOrigin: c.zoom ? `${c.zoom.x ?? 50}% ${c.zoom.y ?? 40}%` : '50% 50%' }} />
+      {c.img ? <Img src={src(c.img)} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', transform: `scale(${z})`, transformOrigin: c.zoom ? `${c.zoom.x ?? 50}% ${c.zoom.y ?? 40}%` : '50% 50%' }} /> : null}
     </AbsoluteFill>
   );
 };
