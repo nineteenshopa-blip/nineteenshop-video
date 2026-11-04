@@ -22,7 +22,7 @@ const Sub = ({ text }) => (
 const Title = ({ title, ep }) => (
   <div style={{ position: 'absolute', top: 120, left: 50, right: 50, textAlign: 'center' }}>
     {ep ? <div style={{ display: 'inline-block', padding: '6px 22px', background: '#C8102E', color: '#fff', fontFamily: SANS, fontWeight: 900, fontSize: 38, borderRadius: 10, marginBottom: 14 }}>{ep}</div> : null}
-    <div style={{ fontFamily: SANS, fontWeight: 900, fontSize: 62, lineHeight: 1.25, color: '#FFE45C', WebkitTextStroke: '10px #111', paintOrder: 'stroke fill' }}>{title}</div>
+    <div style={{ fontFamily: SANS, fontWeight: 900, fontSize: 62, lineHeight: 1.25, whiteSpace: 'pre-line', color: '#FFE45C', WebkitTextStroke: '10px #111', paintOrder: 'stroke fill' }}>{title}</div>
   </div>
 );
 
