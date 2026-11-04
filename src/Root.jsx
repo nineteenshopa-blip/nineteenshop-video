@@ -5,6 +5,7 @@ import { Clip, CLIP } from './Clip';
 import { Cover, Item, Thanks, W, H, COVER_LEN, ITEM_LEN, THANKS_LEN } from './Set';
 import { SlideA, CoverC, LiveHero, LiveGrid, SW, SH, LEN, LIVE_LEN } from './Single';
 import { CoverG, SlideG, GW, GH, GLEN } from './Gallery';
+import { Drama, DW, DH, dramaLen } from './Drama';
 
 const demo = {
   shop: '19號舖子', sub: '日・韓・泰・港 連線代購', line: '@131zlfyx',
@@ -27,6 +28,9 @@ export const Root = () => (
       calculateMetadata={({ props }) => ({ durationInFrames: GLEN[props.mode] || GLEN.point })} />
     <Composition id="LiveHero" component={LiveHero} width={SW} height={SH} fps={30} durationInFrames={LIVE_LEN.hero} defaultProps={{ img: 'logo.png', name: '示範', country: '日本', flag: '🇯🇵', close: '10/20 23:59' }} />
     <Composition id="LiveGrid" component={LiveGrid} width={SW} height={SH} fps={30} durationInFrames={LIVE_LEN.grid} defaultProps={{ items: [{ img: 'logo.png', name: '示範' }], country: '日本', flag: '🇯🇵', close: '10/20 23:59' }} />
+    {/* AI 短劇剪輯（9:16） */}
+    <Composition id="Drama" component={Drama} width={DW} height={DH} fps={30} durationInFrames={dramaLen([{ from: 0, to: 3 }])} defaultProps={{ clips: [], title: '示範', ep: 'EP1', next: '示範預告' }}
+      calculateMetadata={({ props }) => ({ durationInFrames: dramaLen(props.clips) })} />
     {/* 舊的（保留） */}
     <Composition id="Clip" component={Clip} width={1080} height={1350} fps={30} durationInFrames={CLIP} defaultProps={{ s: demo.slides[0], i: 0, n: 3, line: demo.line }} />
     <Composition id="Promo" component={Promo} width={1080} height={1920} fps={30}
