@@ -260,6 +260,12 @@ async function prepareSingle(j, pub) {
   const h1 = pal.h1 != null ? pal.h1 : (j.h1 != null ? j.h1 : 340), h2 = pal.h2 != null ? pal.h2 : j.h2;
   const tag = j.tag || '';
   const n = slides.length;
+  // v10（11/04）：預設乾淨選物風；config.json 的 SINGLE_STYLE 改成 "pop" 可以換回舊的封面 C
+  if ((cfg.SINGLE_STYLE || 'gallery') === 'gallery') {
+    return slides.map((s, i) => i === 0
+      ? { id: 'CoverG', props: { img: s.local, title: s.title || '', sub: s.sub || '', tag, price: j.priceFrom || '' } }
+      : { id: 'SlideG', props: { img: s.local, mode: s.mode || 'point', title: s.title || '', sub: s.sub || '', point: s.point || i, i, n, tag, price: s.mode === 'cta' ? (j.priceFrom || '') : '', cut: s.mode === 'cta' ? prodCut : undefined } });
+  }
   return slides.map((s, i) => i === 0
     ? { id: 'CoverC', props: { scene: s.local, person: personCut, cut: prodCut, title: s.title || '', sub: s.sub || '', tag, h1, h2, price: j.priceFrom || '' } }
     : { id: 'SlideA', props: { img: s.local, mode: s.mode || 'point', title: s.title || '', sub: s.sub || '', point: s.point || i, i, n, tag, h1, h2, price: s.mode === 'cta' ? (j.priceFrom || '') : '', cut: s.mode === 'cta' ? prodCut : undefined } });

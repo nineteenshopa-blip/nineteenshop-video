@@ -4,6 +4,7 @@ import { Promo, SLIDE, INTRO, OUTRO } from './Promo';
 import { Clip, CLIP } from './Clip';
 import { Cover, Item, Thanks, W, H, COVER_LEN, ITEM_LEN, THANKS_LEN } from './Set';
 import { SlideA, CoverC, LiveHero, LiveGrid, SW, SH, LEN, LIVE_LEN } from './Single';
+import { CoverG, SlideG, GW, GH, GLEN } from './Gallery';
 
 const demo = {
   shop: '19號舖子', sub: '日・韓・泰・港 連線代購', line: '@131zlfyx',
@@ -20,6 +21,10 @@ export const Root = () => (
     <Composition id="SlideA" component={SlideA} width={SW} height={SH} fps={30} durationInFrames={LEN.point} defaultProps={{ img: 'logo.png', mode: 'point', title: '示範', sub: '示範副標', tag: '🇯🇵 日本', h1: 340 }}
       calculateMetadata={({ props }) => ({ durationInFrames: LEN[props.mode] || LEN.point })} />
     <Composition id="CoverC" component={CoverC} width={SW} height={SH} fps={30} durationInFrames={LEN.hook} defaultProps={{ scene: 'logo.png', person: 'logo.png', cut: 'logo.png', title: '示範', sub: '示範副標', tag: '🇯🇵 日本', h1: 340 }} />
+    {/* v10：乾淨選物風（11/04 起單品輪播預設） */}
+    <Composition id="CoverG" component={CoverG} width={GW} height={GH} fps={30} durationInFrames={GLEN.hook} defaultProps={{ img: 'logo.png', title: '示範', sub: '示範副標', tag: '日本｜預購', price: '420' }} />
+    <Composition id="SlideG" component={SlideG} width={GW} height={GH} fps={30} durationInFrames={GLEN.point} defaultProps={{ img: 'logo.png', mode: 'point', title: '示範', sub: '示範副標', tag: '日本｜預購', point: 1, i: 1, n: 4 }}
+      calculateMetadata={({ props }) => ({ durationInFrames: GLEN[props.mode] || GLEN.point })} />
     <Composition id="LiveHero" component={LiveHero} width={SW} height={SH} fps={30} durationInFrames={LIVE_LEN.hero} defaultProps={{ img: 'logo.png', name: '示範', country: '日本', flag: '🇯🇵', close: '10/20 23:59' }} />
     <Composition id="LiveGrid" component={LiveGrid} width={SW} height={SH} fps={30} durationInFrames={LIVE_LEN.grid} defaultProps={{ items: [{ img: 'logo.png', name: '示範' }], country: '日本', flag: '🇯🇵', close: '10/20 23:59' }} />
     {/* 舊的（保留） */}
