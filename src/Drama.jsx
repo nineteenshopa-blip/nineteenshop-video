@@ -14,7 +14,7 @@ export const dramaLen = (clips = []) => clips.reduce((s, c) => s + Math.round((c
 
 const Sub = ({ text }) => (
   <div style={{ position: 'absolute', left: 60, right: 60, bottom: 330, textAlign: 'center' }}>
-    <span style={{ fontFamily: SANS, fontWeight: 900, fontSize: 64, lineHeight: 1.3, color: '#fff',
+    <span style={{ fontFamily: SANS, fontWeight: 900, fontSize: 64, lineHeight: 1.3, whiteSpace: 'pre-line', color: '#fff',
       WebkitTextStroke: '10px #111', paintOrder: 'stroke fill', letterSpacing: 2 }}>{text}</span>
   </div>
 );
@@ -48,14 +48,27 @@ const End = ({ next, lastFrame }) => {
   );
 };
 
-/** clips: [{src, from, to, subs:[{t0,t1,text}]}]（秒，subs 的時間以該段開頭為 0） */
+/** 一段影片：zoom＝局部放大 {from,to,x,y}（x,y 為放大中心 %）；mute＝[[t0,t1]] 該段內靜音（秒，以該段開頭為 0） */
+const ClipVideo = ({ c, len }) => {
+  const f = useCurrentFrame();
+  const z = c.zoom ? interpolate(f, [0, len], [c.zoom.from || 1, c.zoom.to || 1.15], { extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.out(Easing.quad) }) : 1;
+  const vol = (fr) => ((c.mute || []).some(([a, b]) => fr / FPS >= a && fr / FPS < b) ? 0 : 1);
+  return (
+    <AbsoluteFill style={{ overflow: 'hidden' }}>
+      <OffthreadVideo src={src(c.src)} startFrom={Math.round((c.from || 0) * FPS)} volume={vol}
+        style={{ width: '100%', height: '100%', objectFit: 'cover', transform: `scale(${z})`, transformOrigin: c.zoom ? `${c.zoom.x ?? 50}% ${c.zoom.y ?? 40}%` : '50% 50%' }} />
+    </AbsoluteFill>
+  );
+};
+
+/** clips: [{src, from, to, zoom, mute, subs:[{t0,t1,text}]}]（秒，subs 的時間以該段開頭為 0） */
 export const Drama = ({ clips = [], title = '', ep = '', next = '', lastFrame = '' }) => {
   let at = 0;
   const seqs = clips.map((c, k) => {
     const len = Math.round((c.to - (c.from || 0)) * FPS);
     const s = (
       <Sequence key={k} from={at} durationInFrames={len}>
-        <OffthreadVideo src={src(c.src)} startFrom={Math.round((c.from || 0) * FPS)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        <ClipVideo c={c} len={len} />
         {(c.subs || []).map((u, j) => (
           <Sequence key={j} from={Math.round(u.t0 * FPS)} durationInFrames={Math.max(1, Math.round((u.t1 - u.t0) * FPS))}><Sub text={u.text} /></Sequence>
         ))}
